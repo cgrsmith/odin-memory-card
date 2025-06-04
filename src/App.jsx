@@ -1,10 +1,9 @@
 import { useState } from 'react'
 import './styles//App.css'
 import CardGrid from './components/CardGrid';
+import GameSettings from './components/GameSettings';
 
 function App() {
-    const initChoices = [0,1,2,3,4,5,6,7,8,9];
-    const initNumOptions = 4;
 
     function generateOptions(numOptions, choices) {
         let options = [];
@@ -25,7 +24,7 @@ function App() {
     }
 
     function handlePick(lastPick) {
-        setOptions(generateOptions(initNumOptions, initChoices));
+        setOptions(generateOptions(gameSettings.numOptions, gameSettings.choices));
         if (selected.includes(lastPick)) {
             setSelected([]);
         } else {
@@ -39,20 +38,45 @@ function App() {
         }
     }
 
+    function goSettings() {
+        setGameSettings({
+            ...gameSettings,
+            running: false
+        })
+    }
+
+    function playGame() {
+        setOptions(generateOptions(gameSettings.numOptions, gameSettings.choices));
+        setSelected([]);
+        setHighScore(0);
+        setGameSettings({
+            ...gameSettings,
+            running: true
+        })
+    }
+
+    const [gameSettings, setGameSettings] = useState({
+            running: false,
+            numOptions: 4,
+            choices: [0,1,2,3,4,5,6,7,8,9]
+    });
+
     const [selected, setSelected] = useState([]);
     const [highScore, setHighScore] = useState(0);
     const [options, setOptions] = useState(
-        generateOptions(initNumOptions, initChoices)
+        generateOptions(gameSettings.numOptions, gameSettings.choices)
     );
 
     return (
         <>
         <div>
             <h1>Memory Game</h1>
-            <p>High Score: {highScore}</p>
-            <p>Current Streak: {selected.length}</p>
-            <CardGrid options = {options} handlePick = {handlePick} />
-            <p>Debug: {selected}</p>
+            {gameSettings.running ?
+                <CardGrid options = {options} highScore = {highScore} streak = {selected.length} handlePick = {handlePick} 
+                    goSettings = {goSettings} debug = {selected} />
+                :
+                <GameSettings gameSettings = {gameSettings} setGameSettings = {setGameSettings} playGame = {playGame}/>
+            }
         </div>
         </>
     )
