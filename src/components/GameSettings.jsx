@@ -27,10 +27,9 @@ const GameSettings = (props) => {
                     type="number"
                     defaultValue={props.gameSettings.choices.length}
                     onChange={(e) => {
-                        console.log([...Array(parseInt(e.target.value)).keys()]);
                         props.setGameSettings({
                             ...props.gameSettings,
-                            choices: [...Array(parseInt(e.target.value)).keys()]
+                            choices: props.generateBaseOptions(e.target.value)
                         })
                     }}
                 />

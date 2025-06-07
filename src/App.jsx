@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import './styles//App.css'
 import CardGrid from './components/CardGrid';
 import GameSettings from './components/GameSettings';
@@ -30,6 +30,7 @@ function App() {
     }
 
     function playGame() {
+        console.log(gameSettings.choices.sort());
         setOptions(generator.generateOptions(gameSettings.numOptions, gameSettings.choices));
         setSelected([]);
         setHighScore(0);
@@ -42,7 +43,7 @@ function App() {
     const [gameSettings, setGameSettings] = useState({
             running: false,
             numOptions: 4,
-            choices: [0,1,2,3,4,5,6,7,8,9]
+            choices: generator.generateBaseOptions(8)
     });
 
     const [selected, setSelected] = useState([]);
@@ -51,15 +52,43 @@ function App() {
         generator.generateOptions(gameSettings.numOptions, gameSettings.choices)
     );
 
+    // useEffect(() => {
+    //     async function fetchData() {
+    //         const pokeData = await generator.generateBaseOptions(8);
+    //         setGameSettings({
+    //             ...gameSettings,
+    //             choices: pokeData
+    //         })
+    //     }
+    //     fetchData();
+    // }, []);
+
+    useEffect(() => {
+        console.log("useeffect");
+        const filledChoices = [];
+        gameSettings.choices.forEach(choice => {
+            filledChoices.push({
+                id: choice.id,
+                name: "hi",
+                frontSpriteURL: "bye"
+            })
+        })
+        setGameSettings({
+            ...gameSettings,
+            choices: filledChoices
+        })
+    }, [])
+
+
     return (
         <>
         <div>
             <h1>Memory Game</h1>
             {gameSettings.running ?
-                <CardGrid options = {options} highScore = {highScore} streak = {selected.length} handlePick = {handlePick} 
-                    goSettings = {goSettings} debug = {selected} />
+                <CardGrid options = {options} baseOptions = {gameSettings.choices}
+                    highScore = {highScore} streak = {selected.length} handlePick = {handlePick} goSettings = {goSettings} debug = {selected} />
                 :
-                <GameSettings gameSettings = {gameSettings} setGameSettings = {setGameSettings} playGame = {playGame}/>
+                <GameSettings gameSettings = {gameSettings} setGameSettings = {setGameSettings} generateBaseOptions = {generator.generateBaseOptions} playGame = {playGame}/>
             }
         </div>
         </>

@@ -2,8 +2,9 @@ import React from 'react'
 
 const Card = (props) => {
   return (
-    <div>
-      <button onClick={() => props.handlePick(props.value)}>val: {props.value}</button>
+    <div onClick={() => props.handlePick(props.value)}>
+    <img src={null} alt={props.value} />
+      val: {props.value}
     </div>
   )
 }
