@@ -33,9 +33,12 @@ body {
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
+  color: rgb(255, 39, 39);
+  letter-spacing: 4px;
 }
 
 button {
+    width: 160px;
   border-radius: 8px;
   border: 1px solid transparent;
   padding: 0.6em 1.2em;
@@ -47,7 +50,7 @@ button {
   transition: border-color 0.25s;
 }
 button:hover {
-  border-color: #646cff;
+  border-color: red;
 }
 button:focus,
 button:focus-visible {

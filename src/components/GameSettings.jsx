@@ -4,10 +4,10 @@ const GameSettings = (props) => {
 
 
     return (
-        <div>
+        <div className="gameSettings">
             <h2>Game Setup</h2>
             <label htmlFor="setOptions">
-                <span>Number of Options:</span> 
+                <span>Options per Round:</span> 
                 <input
                     id="setOptions"
                     type="number"
@@ -20,16 +20,16 @@ const GameSettings = (props) => {
                     }}
                 />
             </label>
-            <label htmlFor="setOptions">
-                <span>Number of Choices:</span> 
+            <label htmlFor="setChoices">
+                <span>Total Choices:</span> 
                 <input
-                    id="setOptions"
+                    id="setChoices"
                     type="number"
-                    defaultValue={props.gameSettings.choices.length}
+                    value={props.gameSettings.totalChoices}
                     onChange={(e) => {
                         props.setGameSettings({
                             ...props.gameSettings,
-                            choices: props.generateBaseOptions(e.target.value)
+                            totalChoices: e.target.value
                         })
                     }}
                 />

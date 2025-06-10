@@ -2,9 +2,9 @@ import React from 'react'
 
 const Card = (props) => {
   return (
-    <div onClick={() => props.handlePick(props.value)}>
-    <img src={null} alt={props.value} />
-      val: {props.value}
+    <div className="card" onClick={() => props.handlePick(props.value.id)}>
+        <img src={props.value.frontSpriteURL} alt={props.value.id} />
+      {/* val: {props.value.name} */}
     </div>
   )
 }

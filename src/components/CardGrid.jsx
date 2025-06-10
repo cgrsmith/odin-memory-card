@@ -1,18 +1,29 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Card from './Card';
 
 const CardGrid = (props) => {
+    // useEffect(() => {
+    //     if(props.streak === 0) {
+    //         console.log(1);
+    //     }
+    // },[props.streak])
+    
   return (
-    <div>
-        <p>High Score: {props.highScore}</p>
-        <p>Current Streak: {props.streak}</p>
-        {props.options.map(option => {
-            return (
-                <Card key={option} value = {option} handlePick = {props.handlePick}/>
-            )
-        })}
-        <p>Debug: {props.debug}</p>
-        <button onClick={props.goSettings}>Settings</button>
+    <div className="gameDisplay">
+        <button onClick={props.goSettings}>New Game</button>
+        <p className="gameStat">High Score: {props.highScore}</p>
+        <p className="gameStat">Current Streak: {props.streak}</p>
+        <div className={"alert " + (props.alert ? "show" : "hide")}>
+            <p>REPEAT</p>
+        </div>
+        <div className="cardGrid">
+            {props.options.map(option => {
+                return (
+                    <Card key={option} value = {props.baseOptions[option]} handlePick = {props.handlePick}/>
+                )
+            })}
+        </div>
+        {/* <p>Debug: {props.debug}</p> */}
     </div>
   )
 }

@@ -1,48 +1,48 @@
 export default function optionGenerator() {
 
-    function generateBaseOptions(numOptions, numChoices = 151) {
+    async function generateBaseOptions(numOptions, numChoices = 151) {
         const baseOptions = new Set();
         while (baseOptions.size < numOptions) {
             const randomNumber = Math.floor(Math.random() * numChoices);
-            baseOptions.add(randomNumber);
+            if (randomNumber !== 0) baseOptions.add(randomNumber);
         }
-        return Array.from(baseOptions).map(option => {
-            return {
-                id: option,
-                name: null,
-                frontSpriteURL: null
-            }
-        });
+        const filledBaseOptions = await Promise.all(Array.from(baseOptions).map(getPokeData));
+        return filledBaseOptions;
     }
 
-    function getPokeData(option) {
-        fetch(`https://pokeapi.co/api/v2/pokemon/${option}`)
-            .then(response => response.json())
-            .then(data => {
-                return {
-                    id: option,
-                    name: data.name,
-                    frontSpriteURL: data.sprites.front_default
-                }
-            });
+    async function getPokeData(option) {
+        // return new Promise(resolve => {
+        //     fetch(`https://pokeapi.co/api/v2/pokemon/${option}`)
+        //     .then(response => response.json())
+        //     .then(data => {
+        //         console.log(data);
+        //         resolve ({
+        //             id: option,
+        //             name: data.name,
+        //             frontSpriteURL: data.sprites.front_default
+        //         })
+            
+        //     })}
+        // )
+        const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${option}`);
+        const data = await res.json();
+        return {
+            id: option,
+            name: data.name,
+            frontSpriteURL: data.sprites.front_default
+        }
     }
 
-    function generateOptions(numOptions, choices) {
-        let options = [];
-        while (options.length < numOptions && options.length < choices.length) {
-            options = addUniqueOption(options, choices);
+    function generateOptions(numOptions, totalChoices) {
+        const options = [];
+        const shuffledOptions = [];
+        for (let i = 0; i < totalChoices; i++){
+            options.push(i);
         }
-        return options;
-    }
-
-    function addUniqueOption(curOptions, choices) {
-        let found = true;
-        let option = - 1;
-        while (found) {
-            option = choices[Math.floor(Math.random() * choices.length)].id;
-            found = curOptions.includes(option);
+        while(shuffledOptions.length < numOptions) {
+            shuffledOptions.push(options.splice(Math.floor(Math.random() * options.length),1)[0]);
         }
-        return [...curOptions, option];
+        return shuffledOptions;
     }
 
     return {generateBaseOptions, generateOptions}
